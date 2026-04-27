@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitcoin Block Music Broadcast Scene</title>
+    <link rel="stylesheet" href="stream.css" />
+  </head>
+  <body>
+    <main class="broadcast-room">
+      <section class="stage" aria-label="Broadcast monitor scene">
+        <img class="scene-plate" src="assets/stream-scene-generated-cooled.png" alt="" />
+
+        <div class="monitor-composite" aria-hidden="true">
+          <div class="monitor-surface">
+            <div class="screen-content">
+              <iframe
+                id="monitorFrame"
+                src="index.html?view=screen"
+                title="Bitcoin Block Music monitor"
+              ></iframe>
+            </div>
+            <div class="screen-photo-shadow" aria-hidden="true"></div>
+            <div class="screen-photo-glare" aria-hidden="true"></div>
+            <div class="screen-edge-shadow-ring" aria-hidden="true"></div>
+            <div class="screen-edge-ring" aria-hidden="true"></div>
+            <div class="screen-bottom-left-cover" aria-hidden="true"></div>
+            <div class="screen-camera-band" aria-hidden="true"></div>
+            <div class="screen-camera-mesh" aria-hidden="true"></div>
+            <div class="screen-vignette" aria-hidden="true"></div>
+            <div class="screen-glass" aria-hidden="true"></div>
+            <div class="screen-scanlines" aria-hidden="true"></div>
+          </div>
+        </div>
+        <button
+          id="monitorPowerButton"
+          class="monitor-power-button"
+          type="button"
+          aria-label="Toggle broadcast music"
+          disabled
+        ></button>
+
+        <aside class="scene-hud">
+          <p class="scene-kicker">Bitcoin Block Music Broadcast</p>
+          <h1 id="currentBlockLabel">Loading block...</h1>
+          <p id="currentDescriptor" class="scene-description">
+            Warming up the generator and preparing the embedded monitor scene.
+          </p>
+
+          <dl class="scene-meta">
+            <div class="scene-meta-row">
+              <dt>Next change</dt>
+              <dd id="nextSwapLabel">--:--</dd>
+            </div>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="control-dock" aria-label="Broadcast controls">
+        <button id="nextBlockButton" type="button" disabled>Next block</button>
+        <button id="latestBlockButton" type="button" disabled>Latest tip</button>
+        <button id="pauseRotationButton" type="button" disabled>Hold block</button>
+        <button id="stopBroadcastButton" type="button" disabled>Pause audio</button>
+      </section>
+
+      <button id="pausedOverlayButton" class="paused-overlay-button" type="button" aria-label="Resume broadcast music">
+        <span aria-hidden="true"></span>
+      </button>
+
+      <div id="startOverlay" class="start-overlay">
+        <div class="start-card">
+          <p class="scene-kicker">Broadcast Mode</p>
+          <h2>Start the live block rotation</h2>
+          <p>
+            Click once to unlock browser audio. After that, the monitor will stay
+            live and switch every 30 seconds, preferring a newly mined block and
+            otherwise falling back to a random historical block until you hit Stop audio.
+          </p>
+          <button id="startBroadcastButton" type="button" disabled>Start broadcast scene</button>
+          <p id="startStatus" class="start-status">Waiting for the generator to finish loading.</p>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="stream.js"></script>
+  </body>
+</html>

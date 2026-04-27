@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitcoin Block Board Music</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="desktop-toolbar">
+      <button type="button" class="start-button">Start</button>
+      <div class="toolbar-window">Bitcoin Block Music</div>
+      <div class="toolbar-window">Web Audio</div>
+      <div class="desktop-clock">Blockstream Online</div>
+    </div>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <div class="window-bar">
+            <span class="window-title">BLOCK-MUSIC.EXE</span>
+            <div class="window-controls" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="window-body">
+            <p class="eyebrow">Bitcoin sonification / board-generated synthesis</p>
+            <h1>Turn any block into machine-forged music.</h1>
+            <p class="hero-text">
+              Every composition is generated live from Bitcoin block data using pulse,
+              triangle, and noise synthesis. No sampled instruments, no canned loops,
+              just block structure translated into rhythm, pitch, density, and timbre.
+            </p>
+          </div>
+        </div>
+
+        <section class="hero-card">
+          <div class="window-bar">
+            <span class="window-title">SONIC-DNA.INI</span>
+            <div class="window-controls" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="hero-card-label">Sound direction</div>
+            <p id="heroDescriptor" class="hero-card-copy">
+              A darker, board-made digital score: minimal, synthetic, and shaped by
+              the chain instead of a fixed song file.
+            </p>
+            <div class="pill-row">
+              <span class="pill">No samples</span>
+              <span class="pill">Pulse + triangle + noise</span>
+              <span class="pill">Bitcoin-driven sequencing</span>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      <main class="dashboard">
+        <section class="panel controls-panel">
+          <div class="panel-head">
+            <h2>Compose a block</h2>
+            <span class="panel-kicker">Height or hash</span>
+          </div>
+
+          <form id="blockForm" class="block-form">
+            <label for="blockInput" class="input-label">Block</label>
+            <div class="input-row">
+              <input
+                id="blockInput"
+                name="block"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="840000 or a 64-character block hash"
+              />
+              <button id="loadButton" type="submit" class="button button-primary">
+                Compose
+              </button>
+              <button id="latestButton" type="button" class="button button-secondary">
+                Latest tip
+              </button>
+            </div>
+
+            <div class="transport-row">
+              <button id="playButton" type="button" class="button button-primary" disabled>
+                Play
+              </button>
+              <button id="stopButton" type="button" class="button button-secondary" disabled>
+                Stop
+              </button>
+              <button id="exportWavButton" type="button" class="button button-secondary" disabled>
+                Export WAV
+              </button>
+              <button id="downloadButton" type="button" class="button button-ghost" disabled>
+                Download sonic DNA
+              </button>
+              <span id="transportState" class="transport-state">Stopped</span>
+            </div>
+
+            <div class="sound-row" role="group" aria-label="Sound palette">
+              <span class="preset-label">Sound</span>
+              <button id="soundProfileSwitch" type="button" class="sound-profile-switch">
+                <span id="soundProfileCurrentLabel" class="sound-profile-switch-label">Original</span>
+                <span class="sound-profile-switch-rail" aria-hidden="true">
+                  <span class="sound-profile-switch-thumb"></span>
+                </span>
+                <span id="soundProfileNextLabel" class="sound-profile-switch-label sound-profile-switch-label-next">
+                  Glass club
+                </span>
+              </button>
+            </div>
+
+            <div class="preset-row">
+              <span class="preset-label">Try these blocks</span>
+              <button type="button" class="preset-button" data-block="0">Genesis</button>
+              <button type="button" class="preset-button" data-block="210000">Halving I</button>
+              <button type="button" class="preset-button" data-block="840000">Halving IV</button>
+              <button type="button" class="preset-button" data-block="944125">Audit-rich</button>
+            </div>
+
+            <p id="status" class="status-line">Load a block to generate a score.</p>
+          </form>
+        </section>
+
+        <section class="panel block-panel">
+          <div class="panel-head">
+            <h2>Now performing</h2>
+            <span class="panel-kicker">Block fingerprint</span>
+          </div>
+          <div id="blockMeta" class="stats-grid"></div>
+        </section>
+
+        <section class="panel live-panel">
+          <div class="panel-head">
+            <h2>Live monitor</h2>
+            <div class="panel-head-actions">
+              <span class="panel-kicker">Chord / voices / hotkeys</span>
+              <button id="prevBeatButton" type="button" class="button button-secondary" disabled>
+                Prev beat
+              </button>
+              <button id="nextBeatButton" type="button" class="button button-secondary" disabled>
+                Next beat
+              </button>
+              <button id="freezeMonitorButton" type="button" class="button button-secondary" disabled>
+                Freeze monitor
+              </button>
+            </div>
+          </div>
+          <div id="liveReadout" class="stats-grid"></div>
+          <div id="liveVoiceChips" class="live-chip-row"></div>
+          <p id="liveNarrative" class="live-narrative"></p>
+        </section>
+
+        <section class="panel score-panel">
+          <div class="panel-head">
+            <h2>Chip score</h2>
+            <div class="panel-head-actions">
+              <span id="scoreCaption" class="panel-kicker">Generated from block data</span>
+              <button id="clearSolosButton" type="button" class="button button-secondary" disabled>
+                Clear solos
+              </button>
+              <button id="unmuteAllButton" type="button" class="button button-secondary" disabled>
+                Unmute all
+              </button>
+            </div>
+          </div>
+          <div id="sequencer" class="sequencer"></div>
+        </section>
+
+        <section class="panel dna-panel">
+          <div class="panel-head">
+            <h2>Sonic DNA</h2>
+            <span class="panel-kicker">What the block became</span>
+          </div>
+          <div id="dnaGrid" class="stats-grid"></div>
+        </section>
+
+        <section class="panel mapping-panel">
+          <div class="panel-head">
+            <h2>Why it sounds like this</h2>
+            <span class="panel-kicker">Field-to-music mapping</span>
+          </div>
+          <div id="mappingList" class="mapping-list"></div>
+        </section>
+
+        <section class="panel transactions-panel">
+          <div class="panel-head">
+            <h2>Texture drivers</h2>
+            <span id="txSampleInfo" class="panel-kicker">Waiting for block data</span>
+          </div>
+          <div id="transactionList" class="transaction-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

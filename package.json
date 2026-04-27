@@ -1,0 +1,11 @@
+{
+  "name": "bitcoin-block-board-music",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Turn Bitcoin blocks into board-generated music in the browser.",
+  "scripts": {
+    "start": "node server.js",
+    "desktop": "powershell -ExecutionPolicy Bypass -File .\\launch-app.ps1",
+    "broadcast": "powershell -ExecutionPolicy Bypass -File .\\launch-broadcast-scene.ps1"
+  }
+}
