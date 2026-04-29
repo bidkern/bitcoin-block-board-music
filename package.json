@@ -3,6 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "description": "Turn Bitcoin blocks into board-generated music in the browser.",
+  "license": "MIT",
+  "keywords": [
+    "javascript",
+    "bitcoin",
+    "web-audio",
+    "generative-music",
+    "creative-coding",
+    "data-art",
+    "browser-app",
+    "github-pages"
+  ],
   "scripts": {
     "start": "node server.js",
     "desktop": "powershell -ExecutionPolicy Bypass -File .\\launch-app.ps1",
