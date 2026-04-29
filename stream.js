@@ -1,8 +1,19 @@
-const ROTATION_INTERVAL_MS = 30_000;
+const DEFAULT_ROTATION_INTERVAL_MS = 30_000;
+const DEMO_ROTATION_INTERVAL_MS = 10_000;
 const RECENT_HISTORY_LIMIT = 10;
 const pageParams = new URLSearchParams(window.location.search);
 const obsMode = pageParams.get("obs") === "1";
+const demoMode = pageParams.get("demo") === "1";
 const autoStartRequested = pageParams.get("autostart") === "1" && pageParams.get("allow-autostart") === "1";
+const requestedIntervalSeconds = Number(pageParams.get("interval"));
+const rotationIntervalMs =
+  Number.isFinite(requestedIntervalSeconds) && requestedIntervalSeconds > 0
+    ? Math.max(1, requestedIntervalSeconds) * 1000
+    : demoMode
+      ? DEMO_ROTATION_INTERVAL_MS
+      : DEFAULT_ROTATION_INTERVAL_MS;
+const randomOnlyRotation = demoMode || pageParams.get("random") === "1";
+const localCommandSyncEnabled = ["", "localhost", "127.0.0.1"].includes(window.location.hostname);
 
 const els = {
   room: document.querySelector(".broadcast-room"),
@@ -71,6 +82,10 @@ function setStartStatus(message) {
 }
 
 async function fetchBroadcastCommand() {
+  if (!localCommandSyncEnabled) {
+    throw new Error("Local broadcast sync is only available on localhost.");
+  }
+
   const response = await fetch("/api/broadcast-command", { cache: "no-store" });
 
   if (!response.ok) {
@@ -81,6 +96,10 @@ async function fetchBroadcastCommand() {
 }
 
 async function sendBroadcastCommand(command) {
+  if (!localCommandSyncEnabled) {
+    return { revision: state.broadcastCommandRevision, command };
+  }
+
   const response = await fetch("/api/broadcast-command", {
     method: "POST",
     headers: {
@@ -127,11 +146,26 @@ function updateControls() {
   els.pauseRotationButton.disabled = !canControl;
   els.stopBroadcastButton.disabled = !canControl;
   els.pauseRotationButton.textContent = state.rotationPaused ? "Resume rotation" : "Hold block";
+  els.stopBroadcastButton.textContent = state.started && !state.audioEnabled ? "Start audio" : "Pause audio";
+}
+
+function getRotationDescription() {
+  const intervalSeconds = Math.round(rotationIntervalMs / 1000);
+
+  if (randomOnlyRotation) {
+    return `Every ${intervalSeconds}s: random historical block`;
+  }
+
+  return `Every ${intervalSeconds}s: new tip or random`;
 }
 
 function updateQueueDepth() {
   if (els.queueDepthLabel) {
-    els.queueDepthLabel.textContent = state.started ? "Tip first, else random" : "Standby";
+    els.queueDepthLabel.textContent = state.started
+      ? randomOnlyRotation
+        ? "Random history"
+        : "Tip first, else random"
+      : "Standby";
   }
 }
 
@@ -185,7 +219,7 @@ function updateSceneCard(snapshot = state.currentSnapshot) {
     }
   } else {
     if (els.rotationMode) {
-      els.rotationMode.textContent = "Every 30s: new tip or random";
+      els.rotationMode.textContent = getRotationDescription();
     }
   }
 
@@ -246,6 +280,10 @@ async function pollBroadcastCommand() {
 }
 
 async function initializeBroadcastCommandSync() {
+  if (!localCommandSyncEnabled) {
+    return;
+  }
+
   try {
     const commandState = await fetchBroadcastCommand();
     state.broadcastCommandRevision = Number.isFinite(commandState.revision) ? commandState.revision : 0;
@@ -267,12 +305,12 @@ function scheduleNextRotation() {
     return;
   }
 
-  state.nextRotationAt = Date.now() + ROTATION_INTERVAL_MS;
+  state.nextRotationAt = Date.now() + rotationIntervalMs;
   updateCountdown();
   state.countdownTimerId = window.setInterval(updateCountdown, 250);
   state.rotationTimerId = window.setTimeout(() => {
     rotateToNextBlock().catch(handleSceneError);
-  }, ROTATION_INTERVAL_MS);
+  }, rotationIntervalMs);
 }
 
 function chooseRandomBlockHeight() {
@@ -324,6 +362,10 @@ function setRotationBaselineTip(height) {
 }
 
 async function chooseNextBlockInput() {
+  if (randomOnlyRotation) {
+    return String(chooseRandomBlockHeight());
+  }
+
   const observedTipHeight = await getLatestTipHeightSafe();
   const baselineTipHeight = state.rotationBaselineTipHeight ?? observedTipHeight;
 
@@ -515,7 +557,7 @@ async function enableAudioInRunningScene() {
 }
 
 async function startBroadcastScene(options = {}) {
-  const { fromAutoStart = false, fromRemoteStart = false } = options;
+  const { fromAutoStart = false, fromRemoteStart = false, allowVisualOnly = false } = options;
 
   if (state.started || state.busy) {
     return;
@@ -536,12 +578,16 @@ async function startBroadcastScene(options = {}) {
       await state.api.unlockAudio();
       audioReady = true;
     } catch (error) {
-      if (!fromRemoteStart) {
+      if (!fromRemoteStart && !allowVisualOnly) {
         throw error;
       }
 
-      console.warn("Remote start could not unlock audio. Continuing with synced visuals only.", error);
-      setStartStatus("Starting synced visuals. Audio still needs a direct OBS interaction.");
+      console.warn("Could not unlock audio immediately. Continuing with visuals only.", error);
+      setStartStatus(
+        fromRemoteStart
+          ? "Starting synced visuals. Audio still needs a direct OBS interaction."
+          : "Starting the live demo visuals. Click Start audio whenever you want to hear the block music."
+      );
     }
 
     setStartStatus("Waiting for the first block to finish loading...");
@@ -578,7 +624,9 @@ async function startBroadcastScene(options = {}) {
     console.error(error);
     setStartStatus(
       fromAutoStart
-        ? "Auto-start needs one manual click. In OBS, right-click the browser source, choose Interact, and click Start broadcast scene once."
+        ? demoMode
+          ? "The live demo loaded, but the browser still needs one click to enable audio."
+          : "Auto-start needs one manual click. In OBS, right-click the browser source, choose Interact, and click Start broadcast scene once."
         : fromRemoteStart
           ? "Synced start reached this scene, but audio may need one direct OBS Interact click."
         : error?.message || "The broadcast scene could not start."
@@ -683,7 +731,13 @@ async function bootstrapSceneCard() {
       return;
     }
 
-    setStartStatus("The generator is ready. Click to start the broadcast scene.");
+    if (demoMode) {
+      setStartStatus("Starting the live demo visuals...");
+      startBroadcastScene({ fromAutoStart: true, allowVisualOnly: true }).catch(handleSceneError);
+      return;
+    }
+
+    setStartStatus("The generator is ready. Click to start the live demo.");
   } catch (error) {
     console.error(error);
     setStartStatus("The generator is still loading. You can try starting again in a moment.");
@@ -708,6 +762,11 @@ els.latestBlockButton.addEventListener("click", () => {
 });
 els.pauseRotationButton.addEventListener("click", toggleRotationPause);
 els.stopBroadcastButton.addEventListener("click", () => {
+  if (state.started && !state.audioEnabled) {
+    enableAudioInRunningScene().catch(handleSceneError);
+    return;
+  }
+
   announceBroadcastCommand("pause");
   pauseBroadcastScene().catch(handleSceneError);
 });
