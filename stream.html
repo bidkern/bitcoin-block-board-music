@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bitcoin Block Music Broadcast Scene</title>
+    <title>Bitcoin Block Music Live Demo</title>
     <link rel="stylesheet" href="stream.css" />
   </head>
   <body>
@@ -41,13 +41,21 @@
         ></button>
 
         <aside class="scene-hud">
-          <p class="scene-kicker">Bitcoin Block Music Broadcast</p>
+          <p class="scene-kicker">Bitcoin Block Music Live Demo</p>
           <h1 id="currentBlockLabel">Loading block...</h1>
           <p id="currentDescriptor" class="scene-description">
             Warming up the generator and preparing the embedded monitor scene.
           </p>
 
           <dl class="scene-meta">
+            <div class="scene-meta-row">
+              <dt>Mode</dt>
+              <dd id="rotationMode">Standby</dd>
+            </div>
+            <div class="scene-meta-row">
+              <dt>Queue</dt>
+              <dd id="queueDepthLabel">Standby</dd>
+            </div>
             <div class="scene-meta-row">
               <dt>Next change</dt>
               <dd id="nextSwapLabel">--:--</dd>
@@ -69,14 +77,14 @@
 
       <div id="startOverlay" class="start-overlay">
         <div class="start-card">
-          <p class="scene-kicker">Broadcast Mode</p>
-          <h2>Start the live block rotation</h2>
+          <p class="scene-kicker">Live Demo Mode</p>
+          <h2>Start the random block rotation</h2>
           <p>
-            Click once to unlock browser audio. After that, the monitor will stay
-            live and switch every 30 seconds, preferring a newly mined block and
-            otherwise falling back to a random historical block until you hit Stop audio.
+            Click once to unlock browser audio. This demo rotates through random
+            historical Bitcoin blocks every 10 seconds so people can see and hear
+            how the piece changes from block to block.
           </p>
-          <button id="startBroadcastButton" type="button" disabled>Start broadcast scene</button>
+          <button id="startBroadcastButton" type="button" disabled>Start live demo</button>
           <p id="startStatus" class="start-status">Waiting for the generator to finish loading.</p>
         </div>
       </div>
