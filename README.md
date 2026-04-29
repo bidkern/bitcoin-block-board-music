@@ -10,7 +10,7 @@ npm start
 
 Then open `http://localhost:4173`.
 
-The app defaults to the original sound. Use the Sound buttons in the composer,
+The app defaults to the original sound. Use the sound switch in the composer,
 or open `http://localhost:4173/?sound=glass-club`, to try the alternate
 clubbier palette without replacing the original.
 
@@ -24,6 +24,16 @@ For the broadcast scene with the alternate palette, open
 
 Click once on the scene to unlock browser audio, then capture that window in
 your streaming software.
+
+## GitHub live demo
+
+The recruiter-friendly live demo is designed for GitHub Pages:
+
+`https://bidkern.github.io/bitcoin-block-board-music/stream.html?demo=1`
+
+It rotates through random historical Bitcoin blocks every 10 seconds so the
+music and visuals keep changing without any manual input. Viewers can click
+once at any time to enable audio.
 
 ## OBS launch
 
