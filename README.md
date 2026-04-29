@@ -3,7 +3,9 @@
 A local-first creative coding project that turns Bitcoin blocks into playable,
 board-generated music in the browser.
 
-![Live demo scene](stream-running.png)
+![24-second local demo capture](assets/portfolio-demo.gif)
+
+24-second local capture from `http://localhost:4173/stream.html?demo=1`.
 
 ## What this is
 

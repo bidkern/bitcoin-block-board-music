@@ -1,5 +1,6 @@
 const DEFAULT_ROTATION_INTERVAL_MS = 30_000;
 const DEMO_ROTATION_INTERVAL_MS = 10_000;
+const AUDIO_UNLOCK_TIMEOUT_MS = 1_500;
 const RECENT_HISTORY_LIMIT = 10;
 const pageParams = new URLSearchParams(window.location.search);
 const obsMode = pageParams.get("obs") === "1";
@@ -556,6 +557,35 @@ async function enableAudioInRunningScene() {
   }
 }
 
+async function tryUnlockAudio(options = {}) {
+  const { allowVisualOnly = false, fromRemoteStart = false } = options;
+
+  setStartStatus("Unlocking audio...");
+
+  if (!allowVisualOnly && !fromRemoteStart) {
+    await state.api.unlockAudio();
+    return true;
+  }
+
+  try {
+    await Promise.race([
+      state.api.unlockAudio(),
+      sleep(AUDIO_UNLOCK_TIMEOUT_MS).then(() => {
+        throw new Error("Audio unlock timed out.");
+      }),
+    ]);
+    return true;
+  } catch (error) {
+    console.warn("Could not unlock audio immediately. Continuing with visuals only.", error);
+    setStartStatus(
+      fromRemoteStart
+        ? "Starting synced visuals. Audio still needs a direct OBS interaction."
+        : "Starting the live demo visuals. Click Start audio whenever you want to hear the block music."
+    );
+    return false;
+  }
+}
+
 async function startBroadcastScene(options = {}) {
   const { fromAutoStart = false, fromRemoteStart = false, allowVisualOnly = false } = options;
 
@@ -572,23 +602,7 @@ async function startBroadcastScene(options = {}) {
     state.api = state.api || (await waitForPlayerApi());
 
     let audioReady = false;
-
-    setStartStatus("Unlocking audio...");
-    try {
-      await state.api.unlockAudio();
-      audioReady = true;
-    } catch (error) {
-      if (!fromRemoteStart && !allowVisualOnly) {
-        throw error;
-      }
-
-      console.warn("Could not unlock audio immediately. Continuing with visuals only.", error);
-      setStartStatus(
-        fromRemoteStart
-          ? "Starting synced visuals. Audio still needs a direct OBS interaction."
-          : "Starting the live demo visuals. Click Start audio whenever you want to hear the block music."
-      );
-    }
+    audioReady = await tryUnlockAudio({ allowVisualOnly, fromRemoteStart });
 
     setStartStatus("Waiting for the first block to finish loading...");
     const initialSnapshot = await waitForReadySnapshot(state.api);
