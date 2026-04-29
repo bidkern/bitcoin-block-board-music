@@ -2,6 +2,8 @@
 
 [Portfolio notes and demo guidance](PORTFOLIO.md)
 
+Public demo: <https://bidkern.github.io/bitcoin-block-board-music/stream.html?demo=1>
+
 A local-first browser app that turns Bitcoin block data into deterministic,
 board-generated music using JavaScript, Web Audio, and custom browser-side
 visual systems.
@@ -132,7 +134,7 @@ node --check server.js
 
 A GitHub Pages workflow is present at `.github/workflows/deploy-pages.yml`.
 
-Recommended homepage / demo URL if Pages is enabled:
+Public homepage / demo URL:
 
 `https://bidkern.github.io/bitcoin-block-board-music/stream.html?demo=1`
 
