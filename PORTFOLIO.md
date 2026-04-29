@@ -10,14 +10,14 @@ Browser app that maps Bitcoin block data into deterministic board-generated musi
 
 ## Demo Or Preview Path
 
-Run `npm start`; README includes the local stream URL and existing `stream-running.png` preview asset.
+Run `npm start`; README includes the local stream URL and existing preview assets. Public demo target: `https://bidkern.github.io/bitcoin-block-board-music/stream.html?demo=1`.
 
 ## Portfolio Readiness
 
 - README linked from the project root.
 - License stance documented in LICENSE.
 - Suggested GitHub topics listed below for repository metadata.
-- Public hosted demo URL is still pending unless the main README says otherwise.
+- Public hosted demo target is documented above. GitHub Pages will serve it after the Pages workflow runs successfully.
 
 ## Suggested Topics
 
