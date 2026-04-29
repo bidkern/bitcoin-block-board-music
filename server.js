@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
+const host = "127.0.0.1";
 const port = Number(process.env.PORT || 4173);
 const root = __dirname;
 const broadcastCommand = {
@@ -99,6 +100,6 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(port, () => {
-  console.log(`Bitcoin block music is ready at http://localhost:${port}`);
+server.listen(port, host, () => {
+  console.log(`Bitcoin block music is ready locally at http://${host}:${port}`);
 });

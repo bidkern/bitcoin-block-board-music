@@ -39,7 +39,7 @@ function Test-AppReady {
 try {
   $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
   $serverScript = Join-Path $projectRoot "server.js"
-  $url = "http://localhost:4173/"
+  $url = "http://127.0.0.1:4173/"
   $nodeCommand = Get-Command node -ErrorAction SilentlyContinue
 
   if (-not $nodeCommand) {

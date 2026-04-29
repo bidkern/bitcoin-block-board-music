@@ -28,8 +28,8 @@ npm start
 
 3. Open the local URLs:
 
-- Main composer and analysis view: `http://localhost:4173`
-- Cinematic live-demo route: `http://localhost:4173/stream.html?demo=1`
+- Main composer and analysis view: `http://127.0.0.1:4173`
+- Cinematic live-demo route: `http://127.0.0.1:4173/stream.html?demo=1`
 
 The demo route rotates through random historical Bitcoin blocks every 10
 seconds. The main view is where you can inspect the score, freeze the live
