@@ -1,4 +1,6 @@
-# Bitcoin Block Board Music
+﻿# Bitcoin Block Board Music
+
+[Portfolio notes and demo guidance](PORTFOLIO.md)
 
 A local-first browser app that turns Bitcoin block data into deterministic,
 board-generated music using JavaScript, Web Audio, and custom browser-side
@@ -152,3 +154,4 @@ Recommended repository homepage field:
 ## License
 
 [MIT](LICENSE)
+
