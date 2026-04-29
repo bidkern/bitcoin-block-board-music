@@ -30,6 +30,22 @@ __pycache__/
 *.log
 *.pid
 
+# Local screenshot/iteration captures
+/*-preview.png
+/*closeup*.png
+/*zoom*.png
+/corner-*.png
+/screen-*.png
+/stream-photo-preview*.png
+/stream-monitor-closeup*.png
+/stream-loaded.png
+/stream-view.png
+/raw-screen-feed.png
+/bottom-left-zoom-*.png
+/ll-zoom*.png
+/ul-zoom*.png
+/ur-zoom*.png
+
 # OS files
 .DS_Store
 Thumbs.db
