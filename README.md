@@ -6,7 +6,7 @@ A local-first browser app that turns Bitcoin block data into deterministic,
 board-generated music using JavaScript, Web Audio, and custom browser-side
 visual systems.
 
-![Broadcast screenshot](stream-running.png)
+![Broadcast screenshot](docs/archive/screenshots/stream-running.png)
 
 ![24-second local demo capture](assets/portfolio-demo.gif)
 
