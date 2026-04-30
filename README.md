@@ -1,5 +1,7 @@
 # Bitcoin Block Board Music
 
+Public demo: <https://bidkern.github.io/bitcoin-block-board-music/stream.html?demo=1>
+
 A local-first browser app that turns Bitcoin block data into deterministic,
 board-generated music using JavaScript, Web Audio, and custom browser-side
 visual systems.
