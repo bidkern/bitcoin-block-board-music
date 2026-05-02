@@ -1,6 +1,6 @@
 # Portfolio Overview: Bitcoin Block Board Music
 
-Bitcoin Block Board Music is a browser-based data-mapping project that turns block structure into deterministic audio and visuals. It is included in the portfolio as creative technical depth, not as a claim that Jesse is targeting crypto, finance, or senior engineering roles.
+Bitcoin Block Board Music is a browser-based data-mapping project that turns block structure into deterministic audio and visuals. It is included in the portfolio as creative technical depth and a compact example of structured input-to-output mapping.
 
 ## What this project proves
 
@@ -21,4 +21,3 @@ Bitcoin Block Board Music is a browser-based data-mapping project that turns blo
 This project supports roles where curiosity, structured thinking, and technical range are useful. It helps show that Jesse can build systems, explain them, and finish them.
 
 For job applications, the main portfolio anchors should still be MRW, LotPilot, and Agent Ledger. This project adds depth behind that story.
-
